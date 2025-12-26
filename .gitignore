@@ -1,1 +1,22 @@
+# Visual Studio cache
 .vs/
+*.suo
+*.user
+*.userosscache
+*.sln.DotSettings.user
+
+# Build folders
+bin/
+obj/
+
+# Copilot Cache / Temp DBs
+**/CopilotIndices/
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+*.log
+
+# Publish folder
+publish/
