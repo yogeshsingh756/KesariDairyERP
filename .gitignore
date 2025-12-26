@@ -1,22 +1,43 @@
-# Visual Studio cache
-.vs/
-*.suo
-*.user
-*.userosscache
-*.sln.DotSettings.user
-
-# Build folders
+# =========================
+# .NET build output
+# =========================
 bin/
 obj/
 
-# Copilot Cache / Temp DBs
-**/CopilotIndices/
-*.db
-*.db-shm
-*.db-wal
+# =========================
+# Visual Studio
+# =========================
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
 
+# =========================
+# Rider / VS Code
+# =========================
+.idea/
+.vscode/
+
+# =========================
+# ASP.NET
+# =========================
+wwwroot/lib/
+wwwroot/dist/
+
+# =========================
 # Logs
+# =========================
 *.log
 
-# Publish folder
-publish/
+# =========================
+# OS
+# =========================
+Thumbs.db
+.DS_Store
+
+# =========================
+# NuGet
+# =========================
+*.nupkg
+packages/
