@@ -1,0 +1,174 @@
+using KesariDairyERP.Api.Authorization;
+using KesariDairyERP.Application.Interfaces;
+using KesariDairyERP.Application.Services;
+using KesariDairyERP.Infrastructure.Data;
+using KesariDairyERP.Infrastructure.Repositories;
+using KesariDairyERP.Infrastructure.Seed;
+using KesariDairyERP.Shared;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Permissions.UserView,
+        policy => policy.Requirements.Add(
+            new PermissionRequirement(Permissions.UserView)));
+
+    options.AddPolicy(Permissions.UserCreate,
+        policy => policy.Requirements.Add(
+            new PermissionRequirement(Permissions.UserCreate)));
+
+    options.AddPolicy(Permissions.UserEdit,
+        policy => policy.Requirements.Add(
+            new PermissionRequirement(Permissions.UserEdit)));
+
+    options.AddPolicy(Permissions.UserDelete,
+        policy => policy.Requirements.Add(
+            new PermissionRequirement(Permissions.UserDelete)));
+    options.AddPolicy(Permissions.RoleView,
+    policy => policy.Requirements.Add(
+        new PermissionRequirement(Permissions.RoleView)));
+    options.AddPolicy(Permissions.RoleCreate,
+policy => policy.Requirements.Add(
+    new PermissionRequirement(Permissions.RoleCreate)));
+    options.AddPolicy(Permissions.RoleEdit,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.RoleEdit)));
+    options.AddPolicy(Permissions.RoleDelete,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.RoleDelete)));
+    options.AddPolicy(Permissions.PermissionView,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.PermissionView)));
+    options.AddPolicy(Permissions.ProductTypeCreate,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.ProductTypeCreate)));
+    options.AddPolicy(Permissions.ProductTypeEdit,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.ProductTypeEdit)));
+    options.AddPolicy(Permissions.RProductTypeDelete,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.RProductTypeDelete)));
+    options.AddPolicy(Permissions.ProductTypeView,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.ProductTypeView)));
+});
+
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        ServerVersion.AutoDetect(
+            builder.Configuration.GetConnectionString("DefaultConnection")
+        )
+    );
+});
+builder.Services.AddScoped<IPermissionService, PermissionService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
+builder.Services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
+builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
+
+builder.Services.AddAuthentication("Bearer")
+.AddJwtBearer("Bearer", options =>
+{
+    options.TokenValidationParameters = new()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+    };
+});
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Kesari Dairy ERP API",
+        Version = "v1"
+    });
+
+    // JWT Authorization
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter JWT token like: Bearer {your token}"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy
+            .WithOrigins(
+                "https://mpublp.abhiworld.in",
+                "http://localhost:3000",
+                "http://localhost:5173",
+                "http://localhost:5177"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();  // only if you send cookies/auth headers
+    });
+});
+
+var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await RbacSeeder.SeedAsync(db);
+}
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
