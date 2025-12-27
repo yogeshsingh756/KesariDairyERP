@@ -26,6 +26,12 @@ namespace KesariDairyERP.Shared
         public const string ProductTypeEdit = "PRODUCT_TYPE_EDIT";
         public const string RProductTypeDelete = "PRODUCT_TYPE_DELETE";
 
+        // Ingredient Type Management
+        public const string IngredientTypeView = "INGREDIENT_TYPE_VIEW";
+        public const string IngredientTypeCreate = "INGREDIENT_TYPE_CREATE";
+        public const string IngredientTypeEdit = "INGREDIENT_TYPE_EDIT";
+        public const string IngredientTypeDelete = "INGREDIENT_TYPE_DELETE";
+
         public const string PermissionView = "PERMISSION_VIEW";
     }
 }

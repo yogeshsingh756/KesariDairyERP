@@ -19,6 +19,7 @@ namespace KesariDairyERP.Infrastructure.Data
         public DbSet<UserRole> UserRoles => Set<UserRole>();
         public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
         public DbSet<ProductType> ProductType => Set<ProductType>();
+        public DbSet<IngredientType> IngredientType => Set<IngredientType>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

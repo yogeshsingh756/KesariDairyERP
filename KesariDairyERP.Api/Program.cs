@@ -58,6 +58,20 @@ new PermissionRequirement(Permissions.RProductTypeDelete)));
     options.AddPolicy(Permissions.ProductTypeView,
 policy => policy.Requirements.Add(
 new PermissionRequirement(Permissions.ProductTypeView)));
+    options.AddPolicy(Permissions.IngredientTypeCreate,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.IngredientTypeCreate)));
+    options.AddPolicy(Permissions.IngredientTypeView,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.IngredientTypeView)));
+    options.AddPolicy(Permissions.IngredientTypeEdit,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.IngredientTypeEdit)));
+    options.AddPolicy(Permissions.IngredientTypeDelete,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.IngredientTypeDelete)));
+
+
 });
 
 builder.Services.AddControllers();
@@ -83,6 +97,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
 builder.Services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
 builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
+builder.Services.AddScoped<IIngredientTypeRepository, IngredientTypeRepository>();
+builder.Services.AddScoped<IIngredientTypeService, IngredientTypeService>();
 
 builder.Services.AddAuthentication("Bearer")
 .AddJwtBearer("Bearer", options =>

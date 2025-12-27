@@ -14,7 +14,7 @@ namespace KesariDairyERP.Domain.Entities
 
         public string? Gender { get; set; }
         public string? Address { get; set; }
-
+        public string? MobileNumber { get; set; }
         public string PasswordHash { get; set; } = null!;
 
         // One role per user
