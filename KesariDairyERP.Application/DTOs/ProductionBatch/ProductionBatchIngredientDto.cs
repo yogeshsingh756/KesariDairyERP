@@ -11,6 +11,7 @@ namespace KesariDairyERP.Application.DTOs.ProductionBatch
         public long IngredientTypeId { get; set; }
         public decimal QuantityUsed { get; set; }
         public string Unit { get; set; } = null!;
+        public string IngredientTypeName { get; set; } = string.Empty;
         public decimal CostPerUnit { get; set; }
         public decimal TotalCost { get; set; }
     }

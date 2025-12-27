@@ -128,7 +128,14 @@ namespace KesariDairyERP.Infrastructure.Data
 
                 entity.HasKey(x => x.Id);
 
-                entity.Property(x => x.BatchUnit).HasMaxLength(20).IsRequired();
+                entity.Property(x => x.BatchUnit)
+                      .HasMaxLength(20)
+                      .IsRequired();
+
+                entity.HasOne(x => x.Product)
+                      .WithMany()
+                      .HasForeignKey(x => x.ProductId)
+                      .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasMany(x => x.Ingredients)
                       .WithOne(x => x.ProductionBatch)

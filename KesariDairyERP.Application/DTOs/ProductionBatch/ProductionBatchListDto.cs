@@ -9,7 +9,8 @@ namespace KesariDairyERP.Application.DTOs.ProductionBatch
     public class ProductionBatchListDto
     {
         public long Id { get; set; }
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
+        public string ProductName { get; set; } = string.Empty;
         public decimal BatchQuantity { get; set; }
         public string BatchUnit { get; set; } = null!;
         public decimal BasePricePerUnit { get; set; }

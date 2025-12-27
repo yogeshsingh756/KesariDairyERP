@@ -8,8 +8,8 @@ namespace KesariDairyERP.Domain.Entities
 {
     public class ProductionBatch : BaseEntity
     {
-        public int ProductId { get; set; }
-
+        public long ProductId { get; set; }
+        public ProductType Product { get; set; } = null!;
         public decimal BatchQuantity { get; set; }
         public string BatchUnit { get; set; } = null!; // KG / LITER
 

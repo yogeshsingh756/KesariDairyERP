@@ -116,6 +116,7 @@ namespace KesariDairyERP.Application.Services
                 {
                     Id = b.Id,
                     ProductId = b.ProductId,
+                    ProductName = b.Product?.Name + " " + b.Product?.Variant,
                     BatchQuantity = b.BatchQuantity,
                     BatchUnit = b.BatchUnit,
                     BasePricePerUnit = b.BasePricePerUnit,
@@ -136,6 +137,7 @@ namespace KesariDairyERP.Application.Services
             {
                 Id = batch.Id,
                 ProductId = batch.ProductId,
+                ProductName = batch.Product?.Name + " " + batch?.Product?.Variant,
                 BatchQuantity = batch.BatchQuantity,
                 BatchUnit = batch.BatchUnit,
                 BasePricePerUnit = batch.BasePricePerUnit,
@@ -145,11 +147,13 @@ namespace KesariDairyERP.Application.Services
                 SellingPricePerUnit = batch.SellingPricePerUnit,
                 TotalIngredientCost = batch.TotalIngredientCost,
                 TotalProcessingCost = batch.TotalProcessingCost,
+                ProcessingFeePerUnit = batch.ProcessingFeePerUnit,
                 TotalCost = batch.TotalCost,
                 BatchDate = batch.BatchDate,
                 Ingredients = batch.Ingredients.Select(i => new ProductionBatchIngredientDto
                 {
                     IngredientTypeId = i.IngredientTypeId,
+                    IngredientTypeName = i.IngredientType.Name,
                     QuantityUsed = i.QuantityUsed,
                     Unit = i.Unit,
                     CostPerUnit = i.CostPerUnit,

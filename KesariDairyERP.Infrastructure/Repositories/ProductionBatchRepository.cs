@@ -29,7 +29,8 @@ namespace KesariDairyERP.Infrastructure.Repositories
     int pageNumber, int pageSize, DateTime? batchDate)
         {
             var query = _db.ProductionBatch
-                .Where(x => !x.IsDeleted);
+       .Include(x => x.Product)   
+       .Where(x => !x.IsDeleted);
 
             if (batchDate.HasValue)
             {
@@ -54,9 +55,10 @@ namespace KesariDairyERP.Infrastructure.Repositories
         public async Task<ProductionBatch> GetByIdWithIngredientsAsync(int id)
         {
             return await _db.ProductionBatch
-                .Include(x => x.Ingredients)
-                .ThenInclude(i => i.IngredientType)
-                .FirstAsync(x => x.Id == id && !x.IsDeleted);
+    .Include(x => x.Product)                 // ✅ ProductType
+    .Include(x => x.Ingredients)
+        .ThenInclude(i => i.IngredientType)  // ✅ IngredientType
+    .FirstAsync(x => x.Id == id && !x.IsDeleted);
         }
     }
 }
