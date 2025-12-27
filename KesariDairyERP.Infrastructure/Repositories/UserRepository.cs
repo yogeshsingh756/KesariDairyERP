@@ -27,13 +27,38 @@ namespace KesariDairyERP.Infrastructure.Repositories
                     u.IsActive &&
                     !u.IsDeleted);
         }
-        public async Task<List<User>> GetAllAsync()
+        public async Task<(List<User> Users, int TotalCount)> GetPagedAsync(
+     int pageNumber,
+     int pageSize,
+     string? search)
         {
-            return await _db.Users
+            var query = _db.Users
                 .Include(u => u.UserRole)
-                    .ThenInclude(ur => ur.Role)
-                .Where(u => !u.IsDeleted)
+                .ThenInclude(ur => ur.Role)
+                .Where(u => !u.IsDeleted);
+
+            // SEARCH
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.ToLower();
+
+                query = query.Where(u =>
+                    u.FullName.ToLower().Contains(search) ||
+                    u.Username.ToLower().Contains(search) ||
+                    u.Email.ToLower().Contains(search) ||
+                    u.UserRole.Role.RoleName.ToLower().Contains(search)
+                );
+            }
+
+            var total = await query.CountAsync();
+
+            var users = await query
+                .OrderByDescending(u => u.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+            return (users, total);
         }
 
         public async Task CreateUserWithRoleAsync(User user, long roleId)

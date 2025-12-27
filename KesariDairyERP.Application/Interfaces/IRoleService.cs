@@ -1,4 +1,5 @@
-﻿using KesariDairyERP.Application.DTOs.Roles;
+﻿using KesariDairyERP.Application.DTOs.Common;
+using KesariDairyERP.Application.DTOs.Roles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,11 @@ namespace KesariDairyERP.Application.Interfaces
 {
     public interface IRoleService
     {
-        Task<List<RoleListDto>> GetAllAsync();
+        Task<PagedResult<RoleListDto>> GetPagedAsync(
+    int pageNumber,
+    int pageSize,
+    string? search
+);
         Task<RoleDetailDto> GetByIdAsync(long id);
         Task CreateAsync(CreateRoleDto dto);
         Task UpdateAsync(UpdateRoleDto dto);

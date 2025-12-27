@@ -12,7 +12,11 @@ namespace KesariDairyERP.Application.Interfaces
     {
         Task<User?> GetUserWithRoleAsync(string username);
 
-        Task<List<User>> GetAllAsync();
+        Task<(List<User> Users, int TotalCount)> GetPagedAsync(
+    int pageNumber,
+    int pageSize,
+    string? search
+);
         Task<User?> GetByIdAsync(long id);
         Task CreateUserWithRoleAsync(User user, long roleId);
         Task UpdateUserAsync(UpdateUserDto dto);

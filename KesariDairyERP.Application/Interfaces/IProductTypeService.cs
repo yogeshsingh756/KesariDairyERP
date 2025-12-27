@@ -1,4 +1,5 @@
-﻿using KesariDairyERP.Application.DTOs.ProductType;
+﻿using KesariDairyERP.Application.DTOs.Common;
+using KesariDairyERP.Application.DTOs.ProductType;
 using KesariDairyERP.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,11 @@ namespace KesariDairyERP.Application.Interfaces
 {
     public interface IProductTypeService
     {
-        Task<List<ProductType>> GetAllAsync();
+        Task<PagedResult<ProductType>> GetPagedAsync(
+    int pageNumber,
+    int pageSize,
+    string? search
+);
         Task<ProductType> GetByIdAsync(int id);
         Task<long> CreateAsync(CreateProductTypeRequest request);
         Task UpdateAsync(UpdateProductTypeRequest request);

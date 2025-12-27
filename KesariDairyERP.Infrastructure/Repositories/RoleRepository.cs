@@ -1,4 +1,5 @@
-﻿using KesariDairyERP.Application.Interfaces;
+﻿using KesariDairyERP.Application.DTOs.Common;
+using KesariDairyERP.Application.Interfaces;
 using KesariDairyERP.Domain.Entities;
 using KesariDairyERP.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -19,11 +20,36 @@ namespace KesariDairyERP.Infrastructure.Repositories
             _db = db;
         }
 
-        public async Task<List<Role>> GetAllAsync()
+        public async Task<PagedResult<Role>> GetPagedAsync(
+     int pageNumber,
+     int pageSize,
+     string? search)
         {
-            return await _db.Roles
-                .Where(r => !r.IsDeleted)
+            var query = _db.Roles
+                .Where(r => !r.IsDeleted);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.ToLower();
+                query = query.Where(r =>
+                    r.RoleName.ToLower().Contains(search) ||
+                    (r.Description != null && r.Description.ToLower().Contains(search))
+                );
+            }
+
+            var total = await query.CountAsync();
+
+            var items = await query
+                .OrderBy(r => r.RoleName)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+            return new PagedResult<Role>
+            {
+                Items = items,
+                TotalRecords = total
+            };
         }
 
         public async Task<Role?> GetByIdWithPermissionsAsync(long id)

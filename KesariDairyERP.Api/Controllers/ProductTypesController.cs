@@ -21,8 +21,17 @@ namespace KesariDairyERP.Api.Controllers
         }
         [HttpGet]
         [HasPermission(Permissions.ProductTypeView)]
-        public async Task<IActionResult> GetAll()
-            => Ok(await _service.GetAllAsync());
+        public async Task<IActionResult> GetAll(
+    int pageNumber = 1,
+    int pageSize = 10,
+    string? search = null)
+        {
+            return Ok(await _service.GetPagedAsync(
+                pageNumber,
+                pageSize,
+                search
+            ));
+        }
 
         [HttpGet("{id}")]
         [HasPermission(Permissions.ProductTypeView)]

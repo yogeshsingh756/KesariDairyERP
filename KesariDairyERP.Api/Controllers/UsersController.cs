@@ -21,9 +21,16 @@ namespace KesariDairyERP.Api.Controllers
 
         [HttpGet]
         [HasPermission(Permissions.UserView)]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers(
+    int pageNumber = 1,
+    int pageSize = 10,
+    string? search = null)
         {
-            return Ok(await _userService.GetUsersAsync());
+            return Ok(await _userService.GetUsersAsync(
+                pageNumber,
+                pageSize,
+                search
+            ));
         }
 
         [HttpPost]

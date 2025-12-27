@@ -1,4 +1,5 @@
-﻿using KesariDairyERP.Application.DTOs.ProductType;
+﻿using KesariDairyERP.Application.DTOs.Common;
+using KesariDairyERP.Application.DTOs.ProductType;
 using KesariDairyERP.Application.Interfaces;
 using KesariDairyERP.Domain.Entities;
 using System;
@@ -18,9 +19,16 @@ namespace KesariDairyERP.Application.Services
             _repo = repo;
         }
 
-        public async Task<List<ProductType>> GetAllAsync()
+        public async Task<PagedResult<ProductType>> GetPagedAsync(
+        int pageNumber,
+        int pageSize,
+        string? search)
         {
-            return await _repo.GetAllAsync();
+            return await _repo.GetPagedAsync(
+                pageNumber,
+                pageSize,
+                search
+            );
         }
 
         public async Task<ProductType> GetByIdAsync(int id)

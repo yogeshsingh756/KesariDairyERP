@@ -1,4 +1,5 @@
-﻿using KesariDairyERP.Application.DTOs.Users;
+﻿using KesariDairyERP.Application.DTOs.Common;
+using KesariDairyERP.Application.DTOs.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,11 @@ namespace KesariDairyERP.Application.Interfaces
 {
     public interface IUserService
     {
-        Task<List<UserListDto>> GetUsersAsync();
+        Task<PagedResult<UserListDto>> GetUsersAsync(
+    int pageNumber,
+    int pageSize,
+    string? search
+);
         Task<UserDetailDto> GetByIdAsync(long id);
         Task CreateUserAsync(CreateUserDto dto);
         Task UpdateUserAsync(UpdateUserDto dto);

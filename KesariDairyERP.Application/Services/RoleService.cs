@@ -1,4 +1,5 @@
-﻿using KesariDairyERP.Application.DTOs.Roles;
+﻿using KesariDairyERP.Application.DTOs.Common;
+using KesariDairyERP.Application.DTOs.Roles;
 using KesariDairyERP.Application.Interfaces;
 using KesariDairyERP.Domain.Entities;
 
@@ -13,15 +14,24 @@ namespace KesariDairyERP.Application.Services
             _repo = repo;
         }
 
-        public async Task<List<RoleListDto>> GetAllAsync()
+        public async Task<PagedResult<RoleListDto>> GetPagedAsync(
+     int pageNumber,
+     int pageSize,
+     string? search)
         {
-            var roles = await _repo.GetAllAsync();
-            return roles.Select(r => new RoleListDto
+            var result = await _repo.GetPagedAsync(pageNumber, pageSize, search);
+
+            return new PagedResult<RoleListDto>
             {
-                Id = r.Id,
-                RoleName = r.RoleName,
-                Description = r.Description
-            }).ToList();
+                Items = result.Items.Select(r => new RoleListDto
+                {
+                    Id = r.Id,
+                    RoleName = r.RoleName,
+                    Description = r.Description
+                }).ToList(),
+
+                TotalRecords = result.TotalRecords
+            };
         }
 
         public async Task<RoleDetailDto> GetByIdAsync(long id)

@@ -1,4 +1,5 @@
-﻿using KesariDairyERP.Application.DTOs.Users;
+﻿using KesariDairyERP.Application.DTOs.Common;
+using KesariDairyERP.Application.DTOs.Users;
 using KesariDairyERP.Application.Interfaces;
 using KesariDairyERP.Domain.Entities;
 using System;
@@ -18,19 +19,30 @@ namespace KesariDairyERP.Application.Services
             _userRepo = userRepo;
         }
 
-        public async Task<List<UserListDto>> GetUsersAsync()
+        public async Task<PagedResult<UserListDto>> GetUsersAsync(
+    int pageNumber,
+    int pageSize,
+    string? search)
         {
-            var users = await _userRepo.GetAllAsync();
+            var (users, total) = await _userRepo.GetPagedAsync(
+                pageNumber,
+                pageSize,
+                search
+            );
 
-            return users.Select(u => new UserListDto
+            return new PagedResult<UserListDto>
             {
-                Id = u.Id,
-                FullName = u.FullName,
-                Username = u.Username,
-                Email = u.Email,
-                Role = u.UserRole.Role.RoleName,
-                IsActive = u.IsActive
-            }).ToList();
+                Items = users.Select(u => new UserListDto
+                {
+                    Id = u.Id,
+                    FullName = u.FullName,
+                    Username = u.Username,
+                    Email = u.Email,
+                    Role = u.UserRole.Role.RoleName,
+                    IsActive = u.IsActive
+                }).ToList(),
+                TotalRecords = total
+            };
         }
 
         public async Task CreateUserAsync(CreateUserDto dto)
