@@ -14,6 +14,7 @@ namespace KesariDairyERP.Application.DTOs.Users
         public string Email { get; set; } = null!;
         public string? Gender { get; set; }
         public string? Address { get; set; }
+        public string? MobileNumber { get; set; }
 
         public bool IsActive { get; set; }
 

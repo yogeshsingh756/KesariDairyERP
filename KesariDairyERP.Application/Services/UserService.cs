@@ -39,7 +39,8 @@ namespace KesariDairyERP.Application.Services
                     Username = u.Username,
                     Email = u.Email,
                     Role = u.UserRole.Role.RoleName,
-                    IsActive = u.IsActive
+                    IsActive = u.IsActive,
+                    MobileNumber = u.MobileNumber
                 }).ToList(),
                 TotalRecords = total
             };

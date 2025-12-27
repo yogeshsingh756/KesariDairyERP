@@ -46,7 +46,8 @@ namespace KesariDairyERP.Infrastructure.Repositories
                     u.FullName.ToLower().Contains(search) ||
                     u.Username.ToLower().Contains(search) ||
                     u.Email.ToLower().Contains(search) ||
-                    u.UserRole.Role.RoleName.ToLower().Contains(search)
+                    u.UserRole.Role.RoleName.ToLower().Contains(search) ||
+                    u.MobileNumber.ToLower().Contains(search)
                 );
             }
 
@@ -85,6 +86,7 @@ namespace KesariDairyERP.Infrastructure.Repositories
 
             user.FullName = dto.FullName;
             user.Email = dto.Email;
+            user.MobileNumber = dto.MobileNumber;
             user.Gender = dto.Gender;
             user.Address = dto.Address;
             user.IsActive = dto.IsActive;
