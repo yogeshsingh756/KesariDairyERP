@@ -72,6 +72,13 @@ policy => policy.Requirements.Add(
 new PermissionRequirement(Permissions.IngredientTypeDelete)));
 
 
+    options.AddPolicy(Permissions.ProductionBatchView,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.ProductionBatchView)));
+    options.AddPolicy(Permissions.ProductionBatchCreate,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.ProductionBatchCreate)));
+
 });
 
 builder.Services.AddControllers();
@@ -87,6 +94,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         )
     );
 });
+builder.Services.AddScoped<IProductionBatchRepository, ProductionBatchRepository>();
+builder.Services.AddScoped<IProductionBatchService, ProductionBatchService>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();

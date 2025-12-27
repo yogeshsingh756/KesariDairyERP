@@ -20,5 +20,6 @@ namespace KesariDairyERP.Application.Interfaces
         Task<long> CreateAsync(CreateProductTypeRequest request);
         Task UpdateAsync(UpdateProductTypeRequest request);
         Task DeleteAsync(int id);
+        Task<List<ProductDropdownDto>> GetDropdownAsync();
     }
 }

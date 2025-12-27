@@ -58,5 +58,11 @@ namespace KesariDairyERP.Api.Controllers
             await _service.DeleteAsync(id);
             return Ok();
         }
+        [HttpGet("dropdown")]
+        [HasPermission(Permissions.ProductTypeView)]
+        public async Task<IActionResult> GetDropdown()
+        {
+            return Ok(await _service.GetDropdownAsync());
+        }
     }
 }

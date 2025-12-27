@@ -2,11 +2,6 @@
 using KesariDairyERP.Application.DTOs.ProductType;
 using KesariDairyERP.Application.Interfaces;
 using KesariDairyERP.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KesariDairyERP.Application.Services
 {
@@ -77,6 +72,16 @@ namespace KesariDairyERP.Application.Services
 
             await _repo.UpdateAsync(entity);
             await _repo.SaveChangesAsync();
+        }
+        public async Task<List<ProductDropdownDto>> GetDropdownAsync()
+        {
+            var products = await _repo.GetDropdownAsync();
+
+            return products.Select(p => new ProductDropdownDto
+            {
+                Id = p.Id,  
+                Name = p.Name + " " + p.Variant
+            }).ToList();
         }
     }
 }

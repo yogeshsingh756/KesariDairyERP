@@ -68,5 +68,12 @@ namespace KesariDairyERP.Infrastructure.Repositories
         {
             await _db.SaveChangesAsync();
         }
+        public async Task<List<ProductType>> GetDropdownAsync()
+        {
+            return await _db.ProductType
+                .Where(x => !x.IsDeleted && x.IsActive)
+                .OrderBy(x => x.Name)
+                .ToListAsync();
+        }
     }
 }

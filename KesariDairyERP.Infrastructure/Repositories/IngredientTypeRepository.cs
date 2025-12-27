@@ -28,7 +28,7 @@ namespace KesariDairyERP.Infrastructure.Repositories
             var query = _db.IngredientType
                 .Where(x => !x.IsDeleted);
 
-            // 🔍 Search by Name or Unit
+            // Search by Name or Unit
             if (!string.IsNullOrWhiteSpace(search))
             {
                 search = search.ToLower();
@@ -38,10 +38,10 @@ namespace KesariDairyERP.Infrastructure.Repositories
                 );
             }
 
-            // 📊 Total count BEFORE pagination
+            // Total count BEFORE pagination
             var total = await query.CountAsync();
 
-            // 📄 Apply pagination
+            // Apply pagination
             var items = await query
                 .OrderBy(x => x.Name)
                 .Skip((pageNumber - 1) * pageSize)
@@ -77,6 +77,13 @@ namespace KesariDairyERP.Infrastructure.Repositories
             var entity = await GetByIdAsync(id);
             entity.IsDeleted = true;
             await _db.SaveChangesAsync();
+        }
+        public async Task<List<IngredientType>> GetDropdownAsync()
+        {
+            return await _db.IngredientType
+                .Where(x => !x.IsDeleted && x.IsActive)
+                .OrderBy(x => x.Name)
+                .ToListAsync();
         }
     }
 }

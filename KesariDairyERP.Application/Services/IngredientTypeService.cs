@@ -80,5 +80,17 @@ namespace KesariDairyERP.Application.Services
         {
             await _repo.DeleteAsync(id);
         }
+        public async Task<List<IngredientTypeDropdownDto>> GetDropdownAsync()
+        {
+            var ingredients = await _repo.GetDropdownAsync();
+
+            return ingredients.Select(i => new IngredientTypeDropdownDto
+            {
+                Id = i.Id,
+                Name = i.Name,
+                Unit = i.Unit,
+                CostPerUnit = i.CostPerUnit
+            }).ToList();
+        }
     }
 }

@@ -32,6 +32,10 @@ namespace KesariDairyERP.Shared
         public const string IngredientTypeEdit = "INGREDIENT_TYPE_EDIT";
         public const string IngredientTypeDelete = "INGREDIENT_TYPE_DELETE";
 
+        // Production Batch Management
+        public const string ProductionBatchView = "PRODUCTION_BATCH_VIEW";
+        public const string ProductionBatchCreate = "PRODUCTION_BATCH_CREATE";
+
         public const string PermissionView = "PERMISSION_VIEW";
     }
 }

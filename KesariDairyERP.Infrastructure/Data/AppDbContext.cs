@@ -20,6 +20,8 @@ namespace KesariDairyERP.Infrastructure.Data
         public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
         public DbSet<ProductType> ProductType => Set<ProductType>();
         public DbSet<IngredientType> IngredientType => Set<IngredientType>();
+        public DbSet<ProductionBatch> ProductionBatch => Set<ProductionBatch>();
+        public DbSet<ProductionBatchIngredient> ProductionBatchIngredient => Set<ProductionBatchIngredient>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +32,8 @@ namespace KesariDairyERP.Infrastructure.Data
             ConfigurePermission(modelBuilder);
             ConfigureUserRole(modelBuilder);
             ConfigureRolePermission(modelBuilder);
+            ConfigureProductionBatch(modelBuilder);          
+            ConfigureProductionBatchIngredient(modelBuilder); 
         }
         private static void ConfigureUser(ModelBuilder modelBuilder)
         {
@@ -114,6 +118,38 @@ namespace KesariDairyERP.Infrastructure.Data
                 entity.HasOne(x => x.Permission)
                       .WithMany()
                       .HasForeignKey(x => x.PermissionId);
+            });
+        }
+        private static void ConfigureProductionBatch(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProductionBatch>(entity =>
+            {
+                entity.ToTable("production_batches");
+
+                entity.HasKey(x => x.Id);
+
+                entity.Property(x => x.BatchUnit).HasMaxLength(20).IsRequired();
+
+                entity.HasMany(x => x.Ingredients)
+                      .WithOne(x => x.ProductionBatch)
+                      .HasForeignKey(x => x.ProductionBatchId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+        }
+        private static void ConfigureProductionBatchIngredient(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProductionBatchIngredient>(entity =>
+            {
+                entity.ToTable("production_batch_ingredients");
+
+                entity.HasKey(x => x.Id);
+
+                entity.Property(x => x.Unit).HasMaxLength(20).IsRequired();
+
+                entity.HasOne(x => x.IngredientType)
+                      .WithMany()
+                      .HasForeignKey(x => x.IngredientTypeId)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
         }
 
