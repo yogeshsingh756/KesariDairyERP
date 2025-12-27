@@ -1,4 +1,5 @@
-﻿using KesariDairyERP.Application.DTOs.Users;
+﻿using KesariDairyERP.Application.DTOs.Auth;
+using KesariDairyERP.Application.DTOs.Users;
 using KesariDairyERP.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ namespace KesariDairyERP.Application.Interfaces
     int pageSize,
     string? search
 );
+        Task<string> GetUserAsync(string verify);
+        Task<string> ChangePasswordAsync(string verify, string newPassword);
         Task<User?> GetByIdAsync(long id);
         Task CreateUserWithRoleAsync(User user, long roleId);
         Task UpdateUserAsync(UpdateUserDto dto);

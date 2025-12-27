@@ -1,6 +1,5 @@
 ﻿using KesariDairyERP.Application.DTOs.Auth;
 using KesariDairyERP.Application.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KesariDairyERP.Api.Controllers
@@ -20,6 +19,23 @@ namespace KesariDairyERP.Api.Controllers
         public async Task<IActionResult> Login(LoginRequest request)
         {
             var response = await _authService.LoginAsync(request);
+            return Ok(response);
+        }
+
+        [HttpPost("verify")]
+        public async Task<IActionResult> Verify(string verify)
+        {
+            var response = await _authService.VerifyAsync(verify);
+            return Ok(response);
+        }
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword(
+    ChangePasswordRequest request)
+        {
+
+            var response = await _authService.ChangePasswordAsync(request);
+
             return Ok(response);
         }
     }

@@ -29,6 +29,14 @@ namespace KesariDairyERP.Application.Services
             _permissionRepo = permissionRepo;
             _config = config;
         }
+        public async Task<string> VerifyAsync(string verify)
+        {
+            return await _userRepo.GetUserAsync(verify);
+        }
+        public async Task<string> ChangePasswordAsync(ChangePasswordRequest changePasswordRequest)
+        {
+            return await _userRepo.ChangePasswordAsync(changePasswordRequest.Verify,changePasswordRequest.NewPassword);
+        }
 
         public async Task<LoginResponse> LoginAsync(LoginRequest request)
         {

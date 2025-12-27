@@ -1,0 +1,9 @@
+services:
+  - name: KesariDairyERP
+    type: web
+    plan: free
+    buildCommand: "dotnet publish -c Release -o out"
+    startCommand: "dotnet out/KesariDairyERP.dll"
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production

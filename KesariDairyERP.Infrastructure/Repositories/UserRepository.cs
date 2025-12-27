@@ -120,5 +120,39 @@ namespace KesariDairyERP.Infrastructure.Repositories
                     .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted);
         }
+        public async Task<string> GetUserAsync(string verify)
+        {
+            string result = "User Not Found";
+            var user = await _db.Users.Where(x => x.Username == verify || x.Email == verify && !x.IsDeleted && x.IsActive)?.FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return result;
+            }
+            else
+            {
+                result = "User Found";
+            }
+                
+            return result;
+
+        }
+        public async Task<string> ChangePasswordAsync(string verify, string newPassword)
+        {
+            string result = "Password Not Changed";
+            var user = await _db.Users.Where(x => x.Username == verify || x.Email == verify && !x.IsDeleted && x.IsActive)?.FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return result;
+            }
+            else
+            {
+                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+                user.UpdatedAt = DateTime.UtcNow;
+
+                await _db.SaveChangesAsync();
+                result = "Password changed successfully";
+            }
+            return result;
+        }
     }
 }

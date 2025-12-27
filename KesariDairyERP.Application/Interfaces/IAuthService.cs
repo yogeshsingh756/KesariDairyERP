@@ -10,5 +10,7 @@ namespace KesariDairyERP.Application.Interfaces
     public interface IAuthService
     {
         Task<LoginResponse> LoginAsync(LoginRequest request);
+        Task<string> VerifyAsync(string verify);
+        Task <string> ChangePasswordAsync(ChangePasswordRequest changePasswordRequest);
     }
 }

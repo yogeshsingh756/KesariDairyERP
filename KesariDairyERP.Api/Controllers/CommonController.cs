@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using KesariDairyERP.Api.Authorization;
+using KesariDairyERP.Application.Interfaces;
+using KesariDairyERP.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +12,12 @@ namespace KesariDairyERP.Api.Controllers
     [Authorize]
     public class CommonController : ControllerBase
     {
+        private readonly IDashboardService _service;
+
+        public CommonController(IDashboardService service)
+        {
+            _service = service;
+        }
         [HttpGet("units")]
         public IActionResult GetUnits()
         {
@@ -20,5 +29,9 @@ namespace KesariDairyERP.Api.Controllers
             new { code = "ML", label = "Milliliter" }
         });
         }
+        [HttpGet("stats")]
+        [HasPermission(Permissions.DashboardView)]
+        public async Task<IActionResult> GetStats()
+            => Ok(await _service.GetStatsAsync());
     }
 }

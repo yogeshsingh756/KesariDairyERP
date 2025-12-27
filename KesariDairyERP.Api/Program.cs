@@ -12,7 +12,12 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
+// fix for render
+//builder.WebHost.ConfigureKestrel(serverOptions =>
+//{
+//    var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
+//    serverOptions.ListenAnyIP(int.Parse(port));
+//});
 // Add services to the container.
 builder.Services.AddAuthorization(options =>
 {
@@ -78,6 +83,10 @@ new PermissionRequirement(Permissions.ProductionBatchView)));
     options.AddPolicy(Permissions.ProductionBatchCreate,
 policy => policy.Requirements.Add(
 new PermissionRequirement(Permissions.ProductionBatchCreate)));
+
+    options.AddPolicy(Permissions.DashboardView,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.DashboardView)));
 
 });
 

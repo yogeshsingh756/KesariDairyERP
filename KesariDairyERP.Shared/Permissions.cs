@@ -37,5 +37,6 @@ namespace KesariDairyERP.Shared
         public const string ProductionBatchCreate = "PRODUCTION_BATCH_CREATE";
 
         public const string PermissionView = "PERMISSION_VIEW";
+        public const string DashboardView = "DASHBOARD_VIEW";
     }
 }
