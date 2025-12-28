@@ -175,10 +175,10 @@ builder.Services.AddCors(options =>
     {
         policy
             .WithOrigins(
-                "https://mpublp.abhiworld.in",
-                "http://localhost:3000",
+            "https://erp.kesari.biz",
+            "http://localhost:3000",
                 "http://localhost:5173",
-                "http://localhost:5177",
+                "http://localhost:5177"
                 "https://erp.kesari.biz"
             )
             .AllowAnyHeader()
