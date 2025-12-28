@@ -11,6 +11,8 @@ namespace KesariDairyERP.Application.Interfaces
     {
         Task<LoginResponse> LoginAsync(LoginRequest request);
         Task<string> VerifyAsync(string verify);
+        Task<string> VerifyEmailAsync(string verify);
+        Task<string> VerifyUsername(string verify);
         Task <string> ChangePasswordAsync(ChangePasswordRequest changePasswordRequest);
     }
 }

@@ -136,6 +136,36 @@ namespace KesariDairyERP.Infrastructure.Repositories
             return result;
 
         }
+        public async Task<string> GetUserEmailAsync(string verify)
+        {
+            string result = "User Not Found";
+            var user = await _db.Users.Where(x=>x.Email == verify)?.FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return result;
+            }
+            else
+            {
+                result = "User Found";
+            }
+
+            return result;
+        }
+        public async Task<string> GetUserNameAsync(string verify)
+        {
+            string result = "User Not Found";
+            var user = await _db.Users.Where(x => x.Username == verify)?.FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return result;
+            }
+            else
+            {
+                result = "User Found";
+            }
+
+            return result;
+        }
         public async Task<string> ChangePasswordAsync(string verify, string newPassword)
         {
             string result = "Password Not Changed";

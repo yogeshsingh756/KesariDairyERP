@@ -28,6 +28,18 @@ namespace KesariDairyERP.Api.Controllers
             var response = await _authService.VerifyAsync(verify);
             return Ok(response);
         }
+        [HttpPost("verify-email")]
+        public async Task<IActionResult> VerifyEmail(string verify)
+        {
+            var response = await _authService.VerifyEmailAsync(verify);
+            return Ok(response);
+        }
+        [HttpPost("verify-username")]
+        public async Task<IActionResult> VerifyUsername(string verify)
+        {
+            var response = await _authService.VerifyUsername(verify);
+            return Ok(response);
+        }
 
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword(

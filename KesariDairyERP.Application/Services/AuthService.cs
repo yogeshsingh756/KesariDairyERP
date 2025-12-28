@@ -33,6 +33,14 @@ namespace KesariDairyERP.Application.Services
         {
             return await _userRepo.GetUserAsync(verify);
         }
+        public async Task<string> VerifyEmailAsync(string verify)
+        {
+            return await _userRepo.GetUserEmailAsync(verify);
+        }
+        public async Task<string> VerifyUsername(string verify)
+        {
+            return await _userRepo.GetUserNameAsync(verify);
+        }
         public async Task<string> ChangePasswordAsync(ChangePasswordRequest changePasswordRequest)
         {
             return await _userRepo.ChangePasswordAsync(changePasswordRequest.Verify,changePasswordRequest.NewPassword);

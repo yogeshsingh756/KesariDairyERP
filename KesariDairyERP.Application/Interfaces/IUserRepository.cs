@@ -19,6 +19,8 @@ namespace KesariDairyERP.Application.Interfaces
     string? search
 );
         Task<string> GetUserAsync(string verify);
+        Task<string> GetUserEmailAsync(string verify);
+        Task<string> GetUserNameAsync(string verify);
         Task<string> ChangePasswordAsync(string verify, string newPassword);
         Task<User?> GetByIdAsync(long id);
         Task CreateUserWithRoleAsync(User user, long roleId);

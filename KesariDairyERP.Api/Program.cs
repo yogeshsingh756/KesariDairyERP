@@ -117,6 +117,8 @@ builder.Services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
 builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
 builder.Services.AddScoped<IIngredientTypeRepository, IngredientTypeRepository>();
 builder.Services.AddScoped<IIngredientTypeService, IngredientTypeService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 
 builder.Services.AddAuthentication("Bearer")
 .AddJwtBearer("Bearer", options =>
