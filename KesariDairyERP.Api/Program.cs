@@ -13,11 +13,11 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 // fix for render
-//builder.WebHost.ConfigureKestrel(serverOptions =>
-//{
-//    var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
-//    serverOptions.ListenAnyIP(int.Parse(port));
-//});
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    var port = Environment.GetEnvironmentVariable("PORT") ?? "8000";
+    serverOptions.ListenAnyIP(int.Parse(port));
+});
 // Add services to the container.
 builder.Services.AddAuthorization(options =>
 {
@@ -178,7 +178,8 @@ builder.Services.AddCors(options =>
                 "https://mpublp.abhiworld.in",
                 "http://localhost:3000",
                 "http://localhost:5173",
-                "http://localhost:5177"
+                "http://localhost:5177",
+                "https://erp.kesari.biz"
             )
             .AllowAnyHeader()
             .AllowAnyMethod()
