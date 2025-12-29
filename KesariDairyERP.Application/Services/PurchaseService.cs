@@ -41,7 +41,7 @@ namespace KesariDairyERP.Application.Services
 
             // ---- AVG RATE (RAW) ----
             decimal avgRateRaw = adjustedRate * (snf / 10m);
-            decimal avgRateFinal = Math.Round(avgRateRaw, 2, MidpointRounding.AwayFromZero);
+            decimal avgRateFinal = Math.Round(avgRateRaw, 3, MidpointRounding.AwayFromZero);
 
             // ---- TOTAL AMOUNT (RAW avgRate -> CEILING) ----
             decimal totalAmountRaw = avgRateRaw * request.Quantity;

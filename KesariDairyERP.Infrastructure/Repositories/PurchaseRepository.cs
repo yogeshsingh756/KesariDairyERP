@@ -23,6 +23,7 @@ namespace KesariDairyERP.Infrastructure.Repositories
         public async Task SaveMilkPurchaseAsync(
      MilkPurchaseConfirmRequest request)
         {
+            
             // 1️⃣ Purchase Master
             var purchase = new PurchaseMaster
             {
