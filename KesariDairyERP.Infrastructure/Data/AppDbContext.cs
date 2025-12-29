@@ -22,6 +22,10 @@ namespace KesariDairyERP.Infrastructure.Data
         public DbSet<IngredientType> IngredientType => Set<IngredientType>();
         public DbSet<ProductionBatch> ProductionBatch => Set<ProductionBatch>();
         public DbSet<ProductionBatchIngredient> ProductionBatchIngredient => Set<ProductionBatchIngredient>();
+        public DbSet<InventoryStock> InventoryStock => Set<InventoryStock>();
+        public DbSet<InventoryTransaction> InventoryTransaction => Set<InventoryTransaction>();
+        public DbSet<PurchaseItem> PurchaseItem => Set<PurchaseItem>();
+        public DbSet<PurchaseMaster> PurchaseMaster => Set<PurchaseMaster>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,7 +37,12 @@ namespace KesariDairyERP.Infrastructure.Data
             ConfigureUserRole(modelBuilder);
             ConfigureRolePermission(modelBuilder);
             ConfigureProductionBatch(modelBuilder);          
-            ConfigureProductionBatchIngredient(modelBuilder); 
+            ConfigureProductionBatchIngredient(modelBuilder);
+            ConfigureInventoryStock(modelBuilder);
+            ConfigureInventoryTransaction(modelBuilder);
+            ConfigurePurchaseMaster(modelBuilder);
+            ConfigurePurchaseItem(modelBuilder);
+
         }
         private static void ConfigureUser(ModelBuilder modelBuilder)
         {
@@ -159,6 +168,69 @@ namespace KesariDairyERP.Infrastructure.Data
                       .OnDelete(DeleteBehavior.Restrict);
             });
         }
+        private static void ConfigureInventoryStock(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<InventoryStock>(entity =>
+            {
+                entity.ToTable("inventory_stock");
+
+                entity.HasKey(x => x.Id);
+
+                entity.Property(x => x.RawMaterialType)
+                      .HasMaxLength(100)
+                      .IsRequired();
+            });
+        }
+        private static void ConfigureInventoryTransaction(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<InventoryTransaction>(entity =>
+            {
+                entity.ToTable("inventory_transactions");
+
+                entity.HasKey(x => x.Id);
+
+                entity.Property(x => x.RawMaterialType)
+                      .HasMaxLength(100)
+                      .IsRequired();
+
+                entity.Property(x => x.TransactionType)
+                      .HasMaxLength(50)
+                      .IsRequired();
+            });
+        }
+        private static void ConfigurePurchaseMaster(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PurchaseMaster>(entity =>
+            {
+                entity.ToTable("purchase_master");
+
+                entity.HasKey(x => x.Id);
+
+                entity.HasMany(x => x.Items)
+                      .WithOne(x => x.PurchaseMaster)
+                      .HasForeignKey(x => x.PurchaseMasterId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+        }
+        private static void ConfigurePurchaseItem(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PurchaseItem>(entity =>
+            {
+                entity.ToTable("purchase_items");
+
+                entity.HasKey(x => x.Id);
+
+                entity.Property(x => x.RawMaterialType)
+                      .HasMaxLength(100)
+                      .IsRequired();
+
+                entity.Property(x => x.Unit)
+                      .HasMaxLength(20)
+                      .IsRequired();
+            });
+        }
+
+
 
     }
 }

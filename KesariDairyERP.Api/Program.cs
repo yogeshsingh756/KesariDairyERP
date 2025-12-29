@@ -119,6 +119,17 @@ builder.Services.AddScoped<IIngredientTypeRepository, IngredientTypeRepository>(
 builder.Services.AddScoped<IIngredientTypeService, IngredientTypeService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+builder.Services.AddScoped<IPurchaseService, PurchaseService>();
+builder.Services.AddScoped<IRawMaterialRepository, RawMaterialRepository>();
+builder.Services.AddScoped<IRawMaterialService, RawMaterialService>();
+
+
+
+
+
 
 builder.Services.AddAuthentication("Bearer")
 .AddJwtBearer("Bearer", options =>
