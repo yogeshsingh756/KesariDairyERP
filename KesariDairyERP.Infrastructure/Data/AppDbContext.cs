@@ -26,6 +26,8 @@ namespace KesariDairyERP.Infrastructure.Data
         public DbSet<InventoryTransaction> InventoryTransaction => Set<InventoryTransaction>();
         public DbSet<PurchaseItem> PurchaseItem => Set<PurchaseItem>();
         public DbSet<PurchaseMaster> PurchaseMaster => Set<PurchaseMaster>();
+        public DbSet<Vendor> Vendors => Set<Vendor>();
+        public DbSet<VendorLedger> VendorLedger => Set<VendorLedger>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +44,8 @@ namespace KesariDairyERP.Infrastructure.Data
             ConfigureInventoryTransaction(modelBuilder);
             ConfigurePurchaseMaster(modelBuilder);
             ConfigurePurchaseItem(modelBuilder);
+            ConfigureVendor(modelBuilder);
+            ConfigureVendorLedger(modelBuilder);
 
         }
         private static void ConfigureUser(ModelBuilder modelBuilder)
@@ -229,7 +233,37 @@ namespace KesariDairyERP.Infrastructure.Data
                       .IsRequired();
             });
         }
+        private static void ConfigureVendor(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Vendor>(entity =>
+            {
+                entity.ToTable("vendors");
+                entity.HasKey(x => x.Id);
 
+                entity.Property(x => x.Name).HasMaxLength(150).IsRequired();
+                entity.Property(x => x.ContactNumber).HasMaxLength(20).IsRequired();
+            });
+        }
+
+        private static void ConfigureVendorLedger(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<VendorLedger>(entity =>
+            {
+                entity.ToTable("vendor_ledger");
+
+                entity.HasKey(x => x.Id);
+
+                entity.HasOne(x => x.Vendor)
+                      .WithMany()
+                      .HasForeignKey(x => x.VendorId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(x => x.PurchaseMaster)
+                      .WithMany()
+                      .HasForeignKey(x => x.PurchaseMasterId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+        }
 
 
     }

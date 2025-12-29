@@ -125,6 +125,10 @@ builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<IRawMaterialRepository, RawMaterialRepository>();
 builder.Services.AddScoped<IRawMaterialService, RawMaterialService>();
+builder.Services.AddScoped<IVendorRepository, VendorRepository>();
+builder.Services.AddScoped<IVendorLedgerRepository, VendorLedgerRepository>();
+builder.Services.AddScoped<IVendorService, VendorService>();
+builder.Services.AddScoped<IVendorLedgerService, VendorLedgerService>();
 
 
 

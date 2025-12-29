@@ -33,6 +33,36 @@ namespace KesariDairyERP.Infrastructure.Repositories
 
             _db.PurchaseMaster.Add(purchase);
             await _db.SaveChangesAsync();
+            // 1️⃣ Get or Create Vendor
+            Vendor vendor;
+
+            if (request.VendorId.HasValue)
+            {
+                vendor = await _db.Vendors.FindAsync(request.VendorId.Value)
+                         ?? throw new Exception("Vendor not found");
+            }
+            else
+            {
+                vendor = new Vendor
+                {
+                    Name = request.VendorName,
+                    ContactNumber = request.ContactNumber,
+                    VendorType = request.VendorType
+                };
+                _db.Vendors.Add(vendor);
+                await _db.SaveChangesAsync();
+            }
+
+            // 2️⃣ Vendor Ledger Entry
+            _db.VendorLedger.Add(new VendorLedger
+            {
+                VendorId = vendor.Id,
+                PurchaseMasterId = purchase.Id,
+                TotalAmount = request.Amount,
+                PaidAmount = request.PaidAmount,
+                PendingAmount = request.Amount - request.PaidAmount,
+                EntryDate = DateTime.UtcNow
+            });
 
             // 2️⃣ Purchase Item
             _db.PurchaseItem.Add(new PurchaseItem
