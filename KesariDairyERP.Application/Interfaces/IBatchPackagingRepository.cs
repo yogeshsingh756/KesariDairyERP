@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace KesariDairyERP.Application.Interfaces
 {
-    public interface IVendorLedgerRepository
+    public interface IBatchPackagingRepository
     {
-        IQueryable<VendorLedger> GetLedgerQueryable(string? vendorType = null);
+        Task<bool> ExistsAsync(long batchId);
+        Task AddAsync(BatchPackaging packaging);
     }
 }

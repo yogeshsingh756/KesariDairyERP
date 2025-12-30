@@ -60,5 +60,13 @@ namespace KesariDairyERP.Infrastructure.Repositories
         .ThenInclude(i => i.IngredientType)  // ✅ IngredientType
     .FirstAsync(x => x.Id == id && !x.IsDeleted);
         }
+        public async Task<ProductionBatch> GetByIdAsync(long id)
+        {
+            return await _db.ProductionBatch
+    .Include(x => x.Product)                 // ✅ ProductType
+    .Include(x => x.Ingredients)
+        .ThenInclude(i => i.IngredientType)  // ✅ IngredientType
+    .FirstAsync(x => x.Id == id && !x.IsDeleted);
+        }
     }
 }

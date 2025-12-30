@@ -1,4 +1,5 @@
-﻿using KesariDairyERP.Application.DTOs.Inventory;
+﻿using KesariDairyERP.Application.DTOs.Common;
+using KesariDairyERP.Application.DTOs.Inventory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace KesariDairyERP.Application.Interfaces
 {
     public interface IInventoryService
     {
-        Task<List<InventoryStockDto>> GetAllAsync();
+        Task<PagedResult<InventoryStockDto>> GetAllAsync(int pageNumber,
+         int pageSize,
+         string? search);
     }
 }

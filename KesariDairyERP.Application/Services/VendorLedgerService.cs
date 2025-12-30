@@ -1,5 +1,7 @@
-﻿using KesariDairyERP.Application.DTOs.VendorLedger;
+﻿using KesariDairyERP.Application.DTOs.Common;
+using KesariDairyERP.Application.DTOs.VendorLedger;
 using KesariDairyERP.Application.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +19,26 @@ namespace KesariDairyERP.Application.Services
             _repo = repo;
         }
 
-        public async Task<List<VendorLedgerDto>> GetLedgerAsync(string? vendorType = null)
+        public async Task<PagedResult<VendorLedgerDto>> GetLedgerAsync(
+     int pageNumber,
+     int pageSize,
+     string? search,
+     string? vendorType)
         {
-            var ledgers = await _repo.GetLedgerAsync(vendorType);
+            var query = _repo.GetLedgerQueryable(vendorType);
 
-            return ledgers
+            // 🔍 SEARCH
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim().ToLower();
+
+                query = query.Where(x =>
+                    x.Vendor.Name.ToLower().Contains(search) ||
+                    x.Vendor.VendorType.ToLower().Contains(search));
+            }
+
+            // 🔗 GROUPING
+            var groupedQuery = query
                 .GroupBy(x => new
                 {
                     x.VendorId,
@@ -36,8 +53,23 @@ namespace KesariDairyERP.Application.Services
                     TotalAmount = g.Sum(x => x.TotalAmount),
                     PaidAmount = g.Sum(x => x.PaidAmount),
                     PendingAmount = g.Sum(x => x.PendingAmount)
-                })
-                .ToList();
+                });
+
+            // 📊 TOTAL COUNT
+            var total = await groupedQuery.CountAsync();
+
+            // 📄 PAGINATION
+            var data = await groupedQuery
+                .OrderBy(x => x.VendorName)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedResult<VendorLedgerDto>
+            {
+                Items = data,
+                TotalRecords = total
+            };
         }
     }
 }

@@ -21,6 +21,7 @@ namespace KesariDairyERP.Api.Controllers
         }
 
         [HttpPost("milk/calculate")]
+        [HasPermission(Permissions.PurchasesCreate)]
         public IActionResult CalculateMilk(
             MilkPurchaseCalculateRequest request)
         {
@@ -28,6 +29,7 @@ namespace KesariDairyERP.Api.Controllers
         }
 
         [HttpPost("milk/confirm")]
+        [HasPermission(Permissions.PurchasesCreate)]
         public async Task<IActionResult> ConfirmMilk(
             MilkPurchaseConfirmRequest request)
         {
@@ -36,6 +38,7 @@ namespace KesariDairyERP.Api.Controllers
         }
 
         [HttpPost("other/calculate")]
+        [HasPermission(Permissions.PurchasesCreate)]
         public IActionResult CalculateOtherMaterial(
        OtherMaterialPurchaseCalculateRequest request)
         {
@@ -43,6 +46,7 @@ namespace KesariDairyERP.Api.Controllers
         }
 
         [HttpPost("other/confirm")]
+        [HasPermission(Permissions.PurchasesCreate)]
         public async Task<IActionResult> ConfirmOtherMaterial(
             OtherMaterialPurchaseConfirmRequest request)
         {
@@ -51,7 +55,7 @@ namespace KesariDairyERP.Api.Controllers
         }
 
         [HttpGet("purchases")]
-        //[HasPermission(Permissions.PurchaseView)]
+        [HasPermission(Permissions.PurchasesView)]
         public async Task<IActionResult> GetPurchases(
     int pageNumber = 1,
     int pageSize = 10,

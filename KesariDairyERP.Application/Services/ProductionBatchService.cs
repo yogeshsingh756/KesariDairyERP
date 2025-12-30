@@ -13,10 +13,12 @@ namespace KesariDairyERP.Application.Services
     public class ProductionBatchService : IProductionBatchService
     {
         private readonly IProductionBatchRepository _repo;
+        private readonly IInventoryRepository _inventoryRepo;
 
-        public ProductionBatchService(IProductionBatchRepository repo)
+        public ProductionBatchService(IProductionBatchRepository repo, IInventoryRepository inventoryRepo)
         {
             _repo = repo;
+            _inventoryRepo = inventoryRepo;
         }
 
         public async Task<CreateProductionBatchResponse> CreateAsync(
@@ -77,6 +79,32 @@ namespace KesariDairyERP.Application.Services
             //TotalCost must use SellingPricePerUnit (already calculated)
             batch.TotalCost =
                 batch.SellingPricePerUnit * request.BatchQuantity;
+            // ---------------- MILK STOCK DEDUCTION ----------------
+
+            // Milk quantity is always batch quantity (LITER)
+            var requiredMilkQty = request.BatchQuantity;
+
+            // Fetch milk stock
+            var milkStock = await _inventoryRepo
+                .GetByRawMaterialAsync("MILK");
+
+            if (milkStock == null)
+            {
+                throw new Exception("Milk stock not found");
+            }
+
+            // ❌ Block negative stock
+            if (milkStock.QuantityAvailable < requiredMilkQty)
+            {
+                throw new Exception(
+                    $"Insufficient milk stock. Available: {milkStock.QuantityAvailable} L, Required: {requiredMilkQty} L");
+            }
+
+            // ✅ Deduct milk
+            milkStock.QuantityAvailable -= requiredMilkQty;
+
+            // Save stock update
+            await _inventoryRepo.UpdateAsync(milkStock);
 
             // ---------------- SAVE ----------------
             await _repo.AddAsync(batch);

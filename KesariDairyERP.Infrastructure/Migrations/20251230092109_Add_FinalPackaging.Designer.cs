@@ -3,6 +3,7 @@ using System;
 using KesariDairyERP.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KesariDairyERP.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251230092109_Add_FinalPackaging")]
+    partial class Add_FinalPackaging
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,20 +28,11 @@ namespace KesariDairyERP.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<int>("ActualPackets")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CalculatedPackets")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("DamagedPackets")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("ExtraPerUnit")
                         .HasColumnType("decimal(65,30)");
@@ -54,9 +48,6 @@ namespace KesariDairyERP.Infrastructure.Migrations
 
                     b.Property<long>("ProductionBatchId")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("Remarks")
-                        .HasColumnType("longtext");
 
                     b.Property<int>("TotalPacketsCreated")
                         .HasColumnType("int");

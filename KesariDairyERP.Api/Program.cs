@@ -88,6 +88,34 @@ new PermissionRequirement(Permissions.ProductionBatchCreate)));
 policy => policy.Requirements.Add(
 new PermissionRequirement(Permissions.DashboardView)));
 
+    options.AddPolicy(Permissions.PurchasesCreate,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.PurchasesCreate)));
+    options.AddPolicy(Permissions.PurchasesView,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.PurchasesView)));
+
+    options.AddPolicy(Permissions.VendorsCreate,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.VendorsCreate)));
+    options.AddPolicy(Permissions.VendorsDelete,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.VendorsDelete)));
+    options.AddPolicy(Permissions.VendorsEdit,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.VendorsEdit)));
+    options.AddPolicy(Permissions.VendorsView,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.VendorsView)));
+
+    options.AddPolicy(Permissions.InventoryView,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.InventoryView)));
+
+    options.AddPolicy(Permissions.VendorsLedgersView,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.VendorsLedgersView)));
+
 });
 
 builder.Services.AddControllers();
@@ -129,6 +157,9 @@ builder.Services.AddScoped<IVendorRepository, VendorRepository>();
 builder.Services.AddScoped<IVendorLedgerRepository, VendorLedgerRepository>();
 builder.Services.AddScoped<IVendorService, VendorService>();
 builder.Services.AddScoped<IVendorLedgerService, VendorLedgerService>();
+builder.Services.AddScoped<IBatchPackagingRepository, BatchPackagingRepository>();
+builder.Services.AddScoped<IFinishedProductStockRepository, FinishedProductStockRepository>();
+builder.Services.AddScoped<IBatchPackagingService, BatchPackagingService>();
 
 
 

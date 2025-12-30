@@ -1,4 +1,6 @@
-﻿using KesariDairyERP.Application.Interfaces;
+﻿using KesariDairyERP.Api.Authorization;
+using KesariDairyERP.Application.Interfaces;
+using KesariDairyERP.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +20,20 @@ namespace KesariDairyERP.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetLedger()
-            => Ok(await _service.GetLedgerAsync());
+        [HasPermission(Permissions.VendorsLedgersView)]
+        public async Task<IActionResult> GetLedger(
+    [FromQuery] int pageNumber = 1,
+    [FromQuery] int pageSize = 10,
+    [FromQuery] string? search = null,
+    [FromQuery] string? vendorType = null)
+        {
+            var result = await _service.GetLedgerAsync(
+                pageNumber,
+                pageSize,
+                search,
+                vendorType);
+
+            return Ok(result);
+        }
     }
 }

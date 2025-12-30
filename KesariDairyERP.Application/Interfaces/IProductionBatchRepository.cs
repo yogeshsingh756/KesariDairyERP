@@ -18,5 +18,6 @@ namespace KesariDairyERP.Application.Interfaces
     );
 
         Task<ProductionBatch> GetByIdWithIngredientsAsync(int id);
+        Task<ProductionBatch> GetByIdAsync(long id);
     }
 }

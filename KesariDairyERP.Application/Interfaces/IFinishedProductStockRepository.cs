@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace KesariDairyERP.Application.Interfaces
 {
-    public interface IVendorLedgerRepository
+    public interface IFinishedProductStockRepository
     {
-        IQueryable<VendorLedger> GetLedgerQueryable(string? vendorType = null);
+        Task<FinishedProductStock?> GetByProductTypeAsync(long productTypeId);
+        Task SaveAsync(FinishedProductStock stock);
     }
 }

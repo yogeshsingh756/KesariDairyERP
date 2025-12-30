@@ -19,7 +19,7 @@ namespace KesariDairyERP.Infrastructure.Repositories
             _db = db;
         }
 
-        public async Task<List<VendorLedger>> GetLedgerAsync(string? vendorType = null)
+        public IQueryable<VendorLedger> GetLedgerQueryable(string? vendorType = null)
         {
             var query = _db.VendorLedger
                 .Include(x => x.Vendor)
@@ -30,7 +30,7 @@ namespace KesariDairyERP.Infrastructure.Repositories
                 query = query.Where(x => x.Vendor.VendorType == vendorType);
             }
 
-            return await query.ToListAsync();
+            return query;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using KesariDairyERP.Application.DTOs.VendorLedger;
+﻿using KesariDairyERP.Application.DTOs.Common;
+using KesariDairyERP.Application.DTOs.VendorLedger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,10 @@ namespace KesariDairyERP.Application.Interfaces
 {
     public interface IVendorLedgerService
     {
-        Task<List<VendorLedgerDto>> GetLedgerAsync(string? vendorType = null);
+        Task<PagedResult<VendorLedgerDto>> GetLedgerAsync(
+     int pageNumber,
+     int pageSize,
+     string? search,
+     string? vendorType);
     }
 }

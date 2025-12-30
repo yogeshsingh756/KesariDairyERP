@@ -28,6 +28,8 @@ namespace KesariDairyERP.Infrastructure.Data
         public DbSet<PurchaseMaster> PurchaseMaster => Set<PurchaseMaster>();
         public DbSet<Vendor> Vendors => Set<Vendor>();
         public DbSet<VendorLedger> VendorLedger => Set<VendorLedger>();
+        public DbSet<BatchPackaging> BatchPackaging => Set<BatchPackaging>();
+        public DbSet<FinishedProductStock> FinishedProductStock => Set<FinishedProductStock>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,7 +48,38 @@ namespace KesariDairyERP.Infrastructure.Data
             ConfigurePurchaseItem(modelBuilder);
             ConfigureVendor(modelBuilder);
             ConfigureVendorLedger(modelBuilder);
+            ConfigureBatchPackaging(modelBuilder);
+            ConfigureFinishedProductStock(modelBuilder);
 
+        }
+        private static void ConfigureBatchPackaging(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<BatchPackaging>(entity =>
+            {
+                entity.ToTable("batch_packaging");
+
+                entity.HasKey(x => x.Id);
+
+                entity.HasOne(x => x.ProductionBatch)
+                      .WithMany()
+                      .HasForeignKey(x => x.ProductionBatchId);
+
+                entity.HasOne(x => x.ProductType)
+                      .WithMany()
+                      .HasForeignKey(x => x.ProductTypeId);
+            });
+        }
+
+        private static void ConfigureFinishedProductStock(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<FinishedProductStock>(entity =>
+            {
+                entity.ToTable("finished_product_stock");
+
+                entity.HasKey(x => x.Id);
+
+                entity.HasIndex(x => x.ProductTypeId).IsUnique();
+            });
         }
         private static void ConfigureUser(ModelBuilder modelBuilder)
         {

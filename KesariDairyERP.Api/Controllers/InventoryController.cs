@@ -20,8 +20,10 @@ namespace KesariDairyERP.Api.Controllers
         }
 
         [HttpGet]
-        //[HasPermission(Permissions.InventoryView)]
-        public async Task<IActionResult> GetAll()
-            => Ok(await _service.GetAllAsync());
+        [HasPermission(Permissions.InventoryView)]
+        public async Task<IActionResult> GetAll(int pageNumber = 1,
+        int pageSize = 10,
+        string? search = null)
+            => Ok(await _service.GetAllAsync(pageNumber,pageSize,search));
     }
 }
