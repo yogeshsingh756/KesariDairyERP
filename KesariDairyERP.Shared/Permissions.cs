@@ -35,6 +35,8 @@ namespace KesariDairyERP.Shared
         // Production Batch Management
         public const string ProductionBatchView = "PRODUCTION_BATCH_VIEW";
         public const string ProductionBatchCreate = "PRODUCTION_BATCH_CREATE";
+        public const string ProductionBatchEdit = "PRODUCTION_BATCH_EDIT";
+        public const string ProductionBatchDelete = "PRODUCTION_BATCH_DELETE";
 
         public const string PermissionView = "PERMISSION_VIEW";
         public const string DashboardView = "DASHBOARD_VIEW";

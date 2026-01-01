@@ -25,6 +25,15 @@ namespace KesariDairyERP.Infrastructure.Repositories
             _db.ProductionBatch.Add(batch);
             await _db.SaveChangesAsync();
         }
+        public async Task UpdateAsync(ProductionBatch batch)
+        {
+            _db.ProductionBatch.Update(batch);
+            await _db.SaveChangesAsync();
+        }
+        public void DeleteIngredients(IEnumerable<ProductionBatchIngredient> ingredients)
+        {
+            _db.ProductionBatchIngredient.RemoveRange(ingredients);
+        }
         public async Task<PagedResult<ProductionBatch>> GetPagedAsync(
     int pageNumber, int pageSize, DateTime? batchDate)
         {
@@ -68,5 +77,6 @@ namespace KesariDairyERP.Infrastructure.Repositories
         .ThenInclude(i => i.IngredientType)  // ✅ IngredientType
     .FirstAsync(x => x.Id == id && !x.IsDeleted);
         }
+
     }
 }

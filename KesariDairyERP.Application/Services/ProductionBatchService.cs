@@ -121,6 +121,127 @@ namespace KesariDairyERP.Application.Services
                 TotalCost = batch.TotalCost
             };
         }
+        public async Task UpdateAsync(
+    long batchId,
+    UpdateProductionBatchRequest request)
+        {
+            var batch = await _repo.GetByIdWithIngredientsAsync(Convert.ToInt32(batchId))
+                ?? throw new Exception("Batch not found");
+
+            // 🔒 HARD LOCK AFTER PACKAGING
+            //if (batch.TotalPacketsCreated > 0)
+            //    throw new Exception("Batch cannot be updated after packaging");
+
+            // ❌ Product & Unit IMMUTABLE
+            if (batch.ProductId != request.ProductId ||
+                batch.BatchUnit != request.BatchUnit)
+            {
+                throw new Exception("Product or unit cannot be changed");
+            }
+
+            // ---------------- MILK STOCK ADJUSTMENT ----------------
+            decimal oldQty = batch.BatchQuantity;
+            decimal newQty = request.BatchQuantity;
+            decimal difference = newQty - oldQty;
+
+            if (difference != 0)
+            {
+                var milkStock = await _inventoryRepo
+                    .GetByRawMaterialAsync("MILK")
+                    ?? throw new Exception("Milk stock not found");
+
+                if (difference > 0 && milkStock.QuantityAvailable < difference)
+                {
+                    throw new Exception(
+                        $"Insufficient milk stock. Required extra: {difference} L");
+                }
+
+                // 🔁 ADJUST STOCK (SAFE)
+                milkStock.QuantityAvailable -= difference;
+                await _inventoryRepo.UpdateAsync(milkStock);
+            }
+
+            // ---------------- UPDATE BASIC FIELDS ----------------
+            batch.BatchQuantity = newQty;
+            batch.Fat = request.Fat;
+            batch.SNF = request.SNF;
+            batch.BasePricePerUnit = request.BasePricePerUnit;
+            batch.ProcessingFeePerUnit = request.ProcessingFeePerUnit;
+            batch.BatchDate = request.BatchDate;
+
+            // 🔥 FIX: Delete old ingredients first
+            _repo.DeleteIngredients(batch.Ingredients);
+
+            // ---------------- INGREDIENT RECALC ----------------
+            batch.Ingredients.Clear();
+
+            decimal totalIngredientCost = 0;
+
+            foreach (var ing in request.Ingredients)
+            {
+                var normalizedQty = NormalizeQuantity(ing.QuantityUsed, ing.Unit);
+                var ingredientCost = normalizedQty * ing.CostPerUnit;
+
+                batch.Ingredients.Add(new ProductionBatchIngredient
+                {
+                    IngredientTypeId = ing.IngredientTypeId,
+                    QuantityUsed = ing.QuantityUsed,
+                    Unit = ing.Unit,
+                    CostPerUnit = ing.CostPerUnit,
+                    TotalCost = ingredientCost
+                });
+
+                totalIngredientCost += ingredientCost;
+            }
+
+            // ---------------- PRICE RECALC ----------------
+            // ---------------- PROCESSING COST ----------------
+            var processingCost =
+                request.BatchQuantity * request.ProcessingFeePerUnit;
+
+            var ingredientCostPerUnit =
+                totalIngredientCost / request.BatchQuantity;
+
+            // ---------------- FINAL PRICING (ORDER MATTERS) ----------------
+
+            batch.TotalIngredientCost = totalIngredientCost;
+
+            batch.ActualCostPerUnit =
+                batch.BasePricePerUnit + ingredientCostPerUnit;
+
+            //Selling price MUST be calculated BEFORE TotalCost
+            batch.SellingPricePerUnit =
+                batch.ActualCostPerUnit + request.ProcessingFeePerUnit;
+
+            batch.TotalProcessingCost = processingCost;
+
+            //TotalCost must use SellingPricePerUnit (already calculated)
+            batch.TotalCost =
+                batch.SellingPricePerUnit * request.BatchQuantity;
+
+            await _repo.UpdateAsync(batch);
+        }
+        public async Task DeleteAsync(long batchId)
+        {
+            var batch = await _repo.GetByIdAsync(batchId)
+                ?? throw new Exception("Batch not found");
+
+            // 🔒 HARD LOCK AFTER PACKAGING
+            //if (batch.TotalPacketsCreated > 0)
+            //    throw new Exception("Batch cannot be deleted after packaging");
+
+            // ---------------- RETURN MILK STOCK ----------------
+            var milkStock = await _inventoryRepo
+                .GetByRawMaterialAsync("MILK")
+                ?? throw new Exception("Milk stock not found");
+
+            milkStock.QuantityAvailable += batch.BatchQuantity;
+            await _inventoryRepo.UpdateAsync(milkStock);
+
+            // ---------------- SOFT DELETE ----------------
+            batch.IsDeleted = true;
+            await _repo.UpdateAsync(batch);
+        }
 
         private decimal NormalizeQuantity(decimal qty, string unit)
         {

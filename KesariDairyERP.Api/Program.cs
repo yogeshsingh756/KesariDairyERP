@@ -84,6 +84,13 @@ new PermissionRequirement(Permissions.ProductionBatchView)));
 policy => policy.Requirements.Add(
 new PermissionRequirement(Permissions.ProductionBatchCreate)));
 
+    options.AddPolicy(Permissions.ProductionBatchDelete,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.ProductionBatchDelete)));
+    options.AddPolicy(Permissions.ProductionBatchEdit,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.ProductionBatchEdit)));
+
     options.AddPolicy(Permissions.DashboardView,
 policy => policy.Requirements.Add(
 new PermissionRequirement(Permissions.DashboardView)));

@@ -19,5 +19,7 @@ namespace KesariDairyERP.Application.Interfaces
     );
 
         Task<ProductionBatchDetailDto> GetByIdAsync(int id);
+        Task UpdateAsync(long batchId, UpdateProductionBatchRequest request);
+        Task DeleteAsync(long batchId);
     }
 }

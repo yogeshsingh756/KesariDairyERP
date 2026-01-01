@@ -39,5 +39,25 @@ namespace KesariDairyERP.Api.Controllers
         [HasPermission(Permissions.ProductionBatchView)]
         public async Task<IActionResult> GetById(int id)
             => Ok(await _service.GetByIdAsync(id));
+
+        // 🔁 UPDATE BATCH
+        [HttpPut("{id}")]
+        [HasPermission(Permissions.ProductionBatchEdit)]
+        public async Task<IActionResult> Update(
+            long id,
+            UpdateProductionBatchRequest request)
+        {
+            await _service.UpdateAsync(id, request);
+            return Ok();
+        }
+
+        // 🗑️ DELETE BATCH
+        [HttpDelete("{id}")]
+        [HasPermission(Permissions.ProductionBatchDelete)]
+        public async Task<IActionResult> Delete(long id)
+        {
+            await _service.DeleteAsync(id);
+            return Ok();
+        }
     }
 }
