@@ -18,5 +18,6 @@ namespace KesariDairyERP.Application.DTOs.ProductionBatch
         public decimal SellingPricePerUnit { get; set; }
         public decimal TotalCost { get; set; }
         public DateTime BatchDate { get; set; }
+        public long TotalPacketsCreated { get; set; } = 0;
     }
 }

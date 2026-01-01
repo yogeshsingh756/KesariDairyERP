@@ -25,6 +25,7 @@ namespace KesariDairyERP.Domain.Entities
         public decimal BasePricePerUnit { get; set; }        // entered from UI
         public decimal ActualCostPerUnit { get; set; }      // base + ingredients
         public decimal SellingPricePerUnit { get; set; }    // actual + processing
+        public long TotalPacketsCreated { get; set; } = 0;
 
         public ICollection<ProductionBatchIngredient> Ingredients { get; set; }
             = new List<ProductionBatchIngredient>();

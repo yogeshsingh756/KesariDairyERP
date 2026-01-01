@@ -49,7 +49,7 @@ namespace KesariDairyERP.Infrastructure.Repositories
             var total = await query.CountAsync();
 
             var items = await query
-                .OrderByDescending(x => x.BatchDate)
+                .OrderByDescending(x => x.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

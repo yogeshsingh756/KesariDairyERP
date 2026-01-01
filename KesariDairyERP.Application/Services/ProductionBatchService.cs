@@ -129,8 +129,8 @@ namespace KesariDairyERP.Application.Services
                 ?? throw new Exception("Batch not found");
 
             // 🔒 HARD LOCK AFTER PACKAGING
-            //if (batch.TotalPacketsCreated > 0)
-            //    throw new Exception("Batch cannot be updated after packaging");
+            if (batch.TotalPacketsCreated > 0)
+                throw new Exception("Batch cannot be updated after packaging");
 
             // ❌ Product & Unit IMMUTABLE
             if (batch.ProductId != request.ProductId ||
@@ -168,6 +168,7 @@ namespace KesariDairyERP.Application.Services
             batch.BasePricePerUnit = request.BasePricePerUnit;
             batch.ProcessingFeePerUnit = request.ProcessingFeePerUnit;
             batch.BatchDate = request.BatchDate;
+            batch.UpdatedAt = DateTime.Now;
 
             // 🔥 FIX: Delete old ingredients first
             _repo.DeleteIngredients(batch.Ingredients);
@@ -227,8 +228,8 @@ namespace KesariDairyERP.Application.Services
                 ?? throw new Exception("Batch not found");
 
             // 🔒 HARD LOCK AFTER PACKAGING
-            //if (batch.TotalPacketsCreated > 0)
-            //    throw new Exception("Batch cannot be deleted after packaging");
+            if (batch.TotalPacketsCreated > 0)
+                throw new Exception("Batch cannot be deleted after packaging");
 
             // ---------------- RETURN MILK STOCK ----------------
             var milkStock = await _inventoryRepo
@@ -272,7 +273,8 @@ namespace KesariDairyERP.Application.Services
                     ActualCostPerUnit = b.ActualCostPerUnit,
                     SellingPricePerUnit = b.SellingPricePerUnit,
                     TotalCost = b.TotalCost,
-                    BatchDate = b.BatchDate
+                    BatchDate = b.BatchDate,
+                    TotalPacketsCreated = b.TotalPacketsCreated
                 }).ToList(),
                 TotalRecords = result.TotalRecords
             };

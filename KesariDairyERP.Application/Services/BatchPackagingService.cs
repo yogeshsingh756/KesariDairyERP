@@ -119,7 +119,8 @@ namespace KesariDairyERP.Application.Services
 
                 Remarks = request.Remarks
             });
-
+            batch.TotalPacketsCreated = actualPackets;
+            await _batchRepo.UpdateAsync(batch);
             var stock = await _stockRepo.GetByProductTypeAsync(batch.ProductId)
                 ?? new FinishedProductStock
                 {
