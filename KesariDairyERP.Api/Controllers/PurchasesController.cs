@@ -21,7 +21,7 @@ namespace KesariDairyERP.Api.Controllers
         }
 
         [HttpPost("milk/calculate")]
-        [HasPermission(Permissions.PurchasesCreate)]
+        //[HasPermission(Permissions.PurchasesCreate)]
         public IActionResult CalculateMilk(
             MilkPurchaseCalculateRequest request)
         {

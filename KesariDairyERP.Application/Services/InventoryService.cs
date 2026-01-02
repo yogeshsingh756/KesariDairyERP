@@ -30,11 +30,15 @@ namespace KesariDairyERP.Application.Services
               search
           );
 
-           return new PagedResult<InventoryStockDto>
-           {
-               Items = inventory, 
-               TotalRecords = total
-           };
+            return new PagedResult<InventoryStockDto>
+            {
+                Items = inventory,
+                TotalRecords = total
+            };
+        }
+        public async Task<InventoryStock?> GetByRawMaterialAsync(string rawMaterialType)
+        {
+            return await _repo.GetByRawMaterialAsync(rawMaterialType);
         }
     }
 }

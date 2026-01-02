@@ -13,10 +13,12 @@ namespace KesariDairyERP.Api.Controllers
     public class CommonController : ControllerBase
     {
         private readonly IDashboardService _service;
+        private readonly IInventoryService _inventoryRepo;
 
-        public CommonController(IDashboardService service)
+        public CommonController(IDashboardService service, IInventoryService inventoryService)
         {
             _service = service;
+            _inventoryRepo = inventoryService;
         }
         [HttpGet("units")]
         public IActionResult GetUnits()
@@ -33,5 +35,10 @@ namespace KesariDairyERP.Api.Controllers
         [HasPermission(Permissions.DashboardView)]
         public async Task<IActionResult> GetStats()
             => Ok(await _service.GetStatsAsync());
+
+        [HttpGet("milkStock")]
+        public async Task<IActionResult> MilkStock()
+           => Ok(await _inventoryRepo
+                    .GetByRawMaterialAsync("MILK"));
     }
 }

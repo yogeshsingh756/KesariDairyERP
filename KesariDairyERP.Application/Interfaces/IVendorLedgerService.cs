@@ -1,4 +1,5 @@
 ﻿using KesariDairyERP.Application.DTOs.Common;
+using KesariDairyERP.Application.DTOs.Vendor;
 using KesariDairyERP.Application.DTOs.VendorLedger;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,8 @@ namespace KesariDairyERP.Application.Interfaces
      int pageSize,
      string? search,
      string? vendorType);
+        Task<List<VendorLedgerTransactionDto>>
+GetVendorLedgerTransactionsAsync(long vendorId);
     }
+
 }

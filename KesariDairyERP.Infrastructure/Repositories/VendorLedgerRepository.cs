@@ -32,5 +32,10 @@ namespace KesariDairyERP.Infrastructure.Repositories
 
             return query;
         }
+        public IQueryable<VendorLedger> GetVendorLedgerQueryable()
+        {
+            return _db.VendorLedger
+                .Where(x => x.IsActive && !x.IsDeleted);
+        }
     }
 }

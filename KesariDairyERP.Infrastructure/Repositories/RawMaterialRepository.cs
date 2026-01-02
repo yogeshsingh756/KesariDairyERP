@@ -32,5 +32,25 @@ namespace KesariDairyERP.Infrastructure.Repositories
                 })
                 .ToListAsync();
         }
+        public async Task<List<PurchaseRawMaterialDto>>
+     GetByPurchaseMasterIdsAsync(List<long> purchaseMasterIds)
+        {
+            return await _db.PurchaseItem
+                .Where(x =>
+                    purchaseMasterIds.Contains(x.PurchaseMasterId) &&
+                    x.IsActive &&
+                    !x.IsDeleted)
+                .Select(x => new PurchaseRawMaterialDto
+                {
+                    Id = x.Id,
+                    PurchaseMasterId = x.PurchaseMasterId,
+                    RawMaterialType = x.RawMaterialType,
+                    Quantity = x.Quantity,
+                    Unit = x.Unit,
+                    RatePerUnit = x.RatePerUnit,
+                    Amount = x.Amount
+                })
+                .ToListAsync();
+        }
     }
 }

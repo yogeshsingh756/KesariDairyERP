@@ -35,5 +35,12 @@ namespace KesariDairyERP.Api.Controllers
 
             return Ok(result);
         }
+        [HttpGet("vendor/{vendorId:long}/transactions")]
+        [HasPermission(Permissions.VendorsLedgersView)]
+        public async Task<IActionResult> GetVendorLedgerTransactions(long vendorId)
+        {
+            var data = await _service.GetVendorLedgerTransactionsAsync(vendorId);
+            return Ok(data);
+        }
     }
 }

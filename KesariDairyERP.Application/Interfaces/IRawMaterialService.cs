@@ -10,5 +10,6 @@ namespace KesariDairyERP.Application.Interfaces
     public interface IRawMaterialService
     {
         Task<List<RawMaterialDto>> GetAllAsync();
+
     }
 }

@@ -10,5 +10,6 @@ namespace KesariDairyERP.Application.Interfaces
     public interface IVendorLedgerRepository
     {
         IQueryable<VendorLedger> GetLedgerQueryable(string? vendorType = null);
+        IQueryable<VendorLedger> GetVendorLedgerQueryable();
     }
 }
