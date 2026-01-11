@@ -11,5 +11,6 @@ namespace KesariDairyERP.Application.Interfaces
     {
         Task<FinishedProductStock?> GetByProductTypeAsync(long productTypeId);
         Task SaveAsync(FinishedProductStock stock);
+        Task<List<FinishedProductStock>> GetAllAsync();
     }
 }

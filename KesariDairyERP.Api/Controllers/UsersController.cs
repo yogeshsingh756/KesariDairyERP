@@ -32,6 +32,13 @@ namespace KesariDairyERP.Api.Controllers
                 search
             ));
         }
+        [HttpGet("byRoleName")]
+        //[HasPermission(Permissions.UserView)]
+        public async Task<IActionResult> GetUsersByRoleName(string roleName)
+        {
+            return Ok(await _userService.GetUsersByRoleNameAsync(roleName
+            ));
+        }
 
         [HttpPost]
         [HasPermission(Permissions.UserCreate)]

@@ -120,6 +120,15 @@ namespace KesariDairyERP.Infrastructure.Repositories
                     .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted);
         }
+        public async Task<List<User>> GetUsersByRoleNameAsync(string roleName)
+        {
+            return await _db.Users
+                .Include(u => u.UserRole)
+                    .ThenInclude(ur => ur.Role)
+                .Where(u => !u.IsDeleted &&
+                            u.UserRole.Role.RoleName == roleName)
+                .ToListAsync();
+        }
         public async Task<string> GetUserAsync(string verify)
         {
             string result = "User Not Found";

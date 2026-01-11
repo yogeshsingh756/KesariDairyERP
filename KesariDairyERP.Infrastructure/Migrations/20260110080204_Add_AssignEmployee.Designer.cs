@@ -3,6 +3,7 @@ using System;
 using KesariDairyERP.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KesariDairyERP.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260110080204_Add_AssignEmployee")]
+    partial class Add_AssignEmployee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,17 +113,14 @@ namespace KesariDairyERP.Infrastructure.Migrations
                     b.Property<long>("ProductTypeId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("ProductionBatchId")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("QuantityAssigned")
                         .HasColumnType("int");
 
                     b.Property<string>("Remarks")
                         .HasColumnType("longtext");
-
-                    b.Property<decimal>("SellingPricePerUnit")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(65,30)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
@@ -133,6 +133,8 @@ namespace KesariDairyERP.Infrastructure.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("ProductTypeId");
+
+                    b.HasIndex("ProductionBatchId");
 
                     b.ToTable("employee_product_assignments", (string)null);
                 });
@@ -911,9 +913,16 @@ namespace KesariDairyERP.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("KesariDairyERP.Domain.Entities.ProductionBatch", "ProductionBatch")
+                        .WithMany()
+                        .HasForeignKey("ProductionBatchId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Employee");
 
                     b.Navigation("ProductType");
+
+                    b.Navigation("ProductionBatch");
                 });
 
             modelBuilder.Entity("KesariDairyERP.Domain.Entities.EmployeeProductStock", b =>

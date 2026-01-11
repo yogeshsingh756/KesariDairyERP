@@ -30,6 +30,8 @@ namespace KesariDairyERP.Infrastructure.Data
         public DbSet<VendorLedger> VendorLedger => Set<VendorLedger>();
         public DbSet<BatchPackaging> BatchPackaging => Set<BatchPackaging>();
         public DbSet<FinishedProductStock> FinishedProductStock => Set<FinishedProductStock>();
+        public DbSet<EmployeeProductAssignment> EmployeeProductAssignments => Set<EmployeeProductAssignment>();
+        public DbSet<EmployeeProductStock> EmployeeProductStocks => Set<EmployeeProductStock>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -50,6 +52,9 @@ namespace KesariDairyERP.Infrastructure.Data
             ConfigureVendorLedger(modelBuilder);
             ConfigureBatchPackaging(modelBuilder);
             ConfigureFinishedProductStock(modelBuilder);
+            ConfigureEmployeeProductAssignment(modelBuilder);
+            ConfigureEmployeeProductStock(modelBuilder);
+
 
         }
         private static void ConfigureBatchPackaging(ModelBuilder modelBuilder)
@@ -297,7 +302,34 @@ namespace KesariDairyERP.Infrastructure.Data
                       .OnDelete(DeleteBehavior.Restrict);
             });
         }
+        private static void ConfigureEmployeeProductAssignment(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<EmployeeProductAssignment>(entity =>
+            {
+                entity.ToTable("employee_product_assignments");
+                entity.HasKey(x => x.Id);
 
+                entity.HasOne(x => x.Employee)
+                      .WithMany()
+                      .HasForeignKey(x => x.EmployeeId);
+
+                entity.HasOne(x => x.ProductType)
+                      .WithMany()
+                      .HasForeignKey(x => x.ProductTypeId);
+            });
+        }
+
+        private static void ConfigureEmployeeProductStock(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<EmployeeProductStock>(entity =>
+            {
+                entity.ToTable("employee_product_stock");
+                entity.HasKey(x => x.Id);
+
+                entity.HasIndex(x => new { x.EmployeeId, x.ProductTypeId })
+                      .IsUnique();
+            });
+        }
 
     }
 }

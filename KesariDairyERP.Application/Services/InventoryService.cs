@@ -14,10 +14,12 @@ namespace KesariDairyERP.Application.Services
     public class InventoryService : IInventoryService
     {
         private readonly IInventoryRepository _repo;
+        private readonly IFinishedProductStockRepository _finishedStockRepo;
 
-        public InventoryService(IInventoryRepository repo)
+        public InventoryService(IInventoryRepository repo, IFinishedProductStockRepository finishedStockRepo)
         {
             _repo = repo;
+            _finishedStockRepo = finishedStockRepo;
         }
 
         public async Task<PagedResult<InventoryStockDto>> GetAllAsync(int pageNumber,
@@ -40,5 +42,20 @@ namespace KesariDairyERP.Application.Services
         {
             return await _repo.GetByRawMaterialAsync(rawMaterialType);
         }
+        public async Task<List<FinishedProductStockDto>> GetFinishedProductsAsync()
+        {
+            var stocks = await _finishedStockRepo.GetAllAsync();
+
+            return stocks.Select(s => new FinishedProductStockDto
+            {
+                ProductTypeId = s.ProductTypeId,
+                ProductName = s.ProductType.Name,
+                Variant = s.ProductType.Variant,
+                Unit = s.ProductType.Unit,
+                QuantityAvailable = s.QuantityAvailable,
+                IsPackaged = s.QuantityAvailable > 0
+            }).ToList();
+        }
     }
 }
+        

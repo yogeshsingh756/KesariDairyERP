@@ -45,6 +45,20 @@ namespace KesariDairyERP.Application.Services
                 TotalRecords = total
             };
         }
+        public async Task<List<UserListDto>> GetUsersByRoleNameAsync(string roleName)
+        {
+            var users = await _userRepo.GetUsersByRoleNameAsync(roleName);
+            return users.Select(u => new UserListDto
+            {
+                Id = u.Id,
+                FullName = u.FullName,
+                Username = u.Username,
+                Email = u.Email,
+                Role = u.UserRole.Role.RoleName,
+                IsActive = u.IsActive,
+                MobileNumber = u.MobileNumber
+            }).ToList();
+        }
 
         public async Task CreateUserAsync(CreateUserDto dto)
         {
@@ -55,6 +69,7 @@ namespace KesariDairyERP.Application.Services
                 Email = dto.Email,
                 Gender = dto.Gender,
                 Address = dto.Address,
+                MobileNumber = dto.MobileNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password)
             };
 

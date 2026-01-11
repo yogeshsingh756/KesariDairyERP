@@ -25,5 +25,12 @@ namespace KesariDairyERP.Api.Controllers
         int pageSize = 10,
         string? search = null)
             => Ok(await _service.GetAllAsync(pageNumber,pageSize,search));
+
+        [HttpGet("finished-product-stock")]
+        [HasPermission(Permissions.InventoryView)]
+        public async Task<IActionResult> GetFinishedProductStock()
+        {
+            return Ok(await _service.GetFinishedProductsAsync());
+        }
     }
 }

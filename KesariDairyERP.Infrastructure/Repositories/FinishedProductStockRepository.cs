@@ -33,5 +33,12 @@ namespace KesariDairyERP.Infrastructure.Repositories
 
             await _db.SaveChangesAsync();
         }
+        public async Task<List<FinishedProductStock>> GetAllAsync()
+        {
+            return await _db.FinishedProductStock
+                .Include(x => x.ProductType)
+                .Where(x => !x.IsDeleted)
+                .ToListAsync();
+        }
     }
 }

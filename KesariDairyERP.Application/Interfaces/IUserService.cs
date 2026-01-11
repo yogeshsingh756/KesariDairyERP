@@ -1,5 +1,6 @@
 ﻿using KesariDairyERP.Application.DTOs.Common;
 using KesariDairyERP.Application.DTOs.Users;
+using KesariDairyERP.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,6 @@ namespace KesariDairyERP.Application.Interfaces
         Task CreateUserAsync(CreateUserDto dto);
         Task UpdateUserAsync(UpdateUserDto dto);
         Task SoftDeleteUserAsync(long userId);
+        Task<List<UserListDto>> GetUsersByRoleNameAsync(string roleName);
     }
 }

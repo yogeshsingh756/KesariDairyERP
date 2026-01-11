@@ -58,5 +58,9 @@ namespace KesariDairyERP.Shared
         // Vendors Ledgers Management
         public const string VendorsLedgersView = "VENDORS_LEDGERS_VIEW";
 
+        // Assign Product to Employee
+        public const string EmployeeStockAssign = "EMPLOYEE_STOCK_ASSIGN";
+        public const string EmployeeStockView = "EMPLOYEE_STOCK_VIEW";
+
     }
 }

@@ -123,6 +123,14 @@ new PermissionRequirement(Permissions.InventoryView)));
 policy => policy.Requirements.Add(
 new PermissionRequirement(Permissions.VendorsLedgersView)));
 
+    options.AddPolicy(Permissions.EmployeeStockAssign,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.EmployeeStockAssign)));
+
+    options.AddPolicy(Permissions.EmployeeStockView,
+policy => policy.Requirements.Add(
+new PermissionRequirement(Permissions.EmployeeStockView)));
+
 });
 
 builder.Services.AddControllers();
@@ -167,6 +175,9 @@ builder.Services.AddScoped<IVendorLedgerService, VendorLedgerService>();
 builder.Services.AddScoped<IBatchPackagingRepository, BatchPackagingRepository>();
 builder.Services.AddScoped<IFinishedProductStockRepository, FinishedProductStockRepository>();
 builder.Services.AddScoped<IBatchPackagingService, BatchPackagingService>();
+builder.Services.AddScoped<IEmployeeProductAssignmentRepository, EmployeeProductAssignmentRepository>();
+builder.Services.AddScoped<IEmployeeProductStockRepository, EmployeeProductStockRepository>();
+builder.Services.AddScoped<IEmployeeStockService, EmployeeStockService>();
 
 
 

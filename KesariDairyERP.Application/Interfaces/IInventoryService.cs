@@ -15,5 +15,6 @@ namespace KesariDairyERP.Application.Interfaces
          int pageSize,
          string? search);
         Task<InventoryStock?> GetByRawMaterialAsync(string rawMaterialType);
+        Task<List<FinishedProductStockDto>> GetFinishedProductsAsync();
     }
 }

@@ -23,6 +23,7 @@ namespace KesariDairyERP.Application.Interfaces
         Task<string> GetUserNameAsync(string verify);
         Task<string> ChangePasswordAsync(string verify, string newPassword);
         Task<User?> GetByIdAsync(long id);
+        Task<List<User>> GetUsersByRoleNameAsync(string roleName);
         Task CreateUserWithRoleAsync(User user, long roleId);
         Task UpdateUserAsync(UpdateUserDto dto);
         Task SoftDeleteAsync(long userId);
